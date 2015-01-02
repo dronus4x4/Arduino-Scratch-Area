@@ -4,17 +4,14 @@
 
 ### What is this repository for? ###
 
-
-
-### How do I get set up? ###
+Storing code for arduino and other projects.
 
 
 
 ### Contribution guidelines ###
 
-
+Check stuff out, work on t and check it back in :)
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+Dick
