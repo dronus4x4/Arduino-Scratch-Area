@@ -1,0 +1,199 @@
+/*
+H prefol 
+version 3 average of volts added
+*/
+
+#include <Wire.h>
+#include <LCD.h>
+#include <LiquidCrystal_I2C.h>
+#include <dht.h> // FOR DHT 11 TEMP SENSOR
+#define  lcdBacklightPin   3    // D3 is the standard pin for the Freetronics LCD & Keypad Shield backlight/brightness control
+#define dht_dpin A3 //no ; here. Set equal to channel sensor is on
+
+/*-----( Declare objects )-----*/  
+LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  // Set the LCD I2C address
+
+// variables for input pin and control LED
+
+dht DHT;
+
+  int analogInput0 = 0;
+  int analogInput1 = 1;
+  int analogInput2 = 2;
+  int vout = 0.0;
+  int vin = 0.0;
+  int backlight; 
+  
+  float vout1 = 0.0;
+  float vin1 = 0.0;
+  float R1 = 10000;    // !! resistance of R1 !!
+  float R2 = 5000;     // !! resistance of R2 !!
+
+// variable to store the value 
+float value = 0;
+float value1;
+void setup(){
+ 
+  
+  pinMode(analogInput0, INPUT);
+  pinMode(analogInput1, INPUT);
+  pinMode(analogInput2, INPUT);
+  pinMode( lcdBacklightPin, OUTPUT );  // set the LCD control pin to an output
+ // pinMode( BacklightPin, INPUT );  // set the LCD control pin to an output
+  
+  // set up the LCD's number of columns and rows:
+  lcd.begin(16, 2);
+  lcd.clear();
+  // set the backlight
+  backlight = 10;
+  analogWrite(lcdBacklightPin, backlight );    // set any PWM brightness
+ 
+}
+void loop(){
+
+  
+value1 = analogRead(analogInput1);
+value1 = ((value1 *5) / 1024.0);
+value1 = value1 / (R2/(R1+R2));  
+  // print volt meter result to lcd display
+  lcd.setCursor(0, 1);
+  lcd.print("Batt=");
+  lcd.setCursor(5, 1);
+  lcd.print(value1);
+  lcd.print("V");
+ 
+  DHT.read11(dht_dpin); // READ DHT11
+  lcd.print(" T=");
+  lcd.print(DHT.temperature); 
+  lcd.print(" C");
+  
+ 
+  // LPG tank read  
+  // read the value on analog input
+  // get average value over 21 readings
+   value = analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100);
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100);   
+    value = value + analogRead(analogInput0);
+    value1 = analogRead(analogInput1);
+   delay(100);
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100);
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100); 
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100); 
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100); 
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100);
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100); 
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100);
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100); 
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100); 
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100); 
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100);
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100);
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100);
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100); 
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100); 
+   value = value + analogRead(analogInput0); 
+   value1 = analogRead(analogInput1);
+   delay(100);
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100); 
+   value = value + analogRead(analogInput0);
+   value1 = analogRead(analogInput1);
+   delay(100);
+   
+   value = value / 21; // get average
+   value1 = value1 / 21; // get average
+   
+     lcd.clear();
+ vout = ((value *5) / 1024.0)*100;
+ 
+ if (vout >= 90) // limit max reading to 85L
+   {
+        vout = 90;
+   }
+ vin = vout * 4.16667; 
+
+  // print result to lcd display
+   lcd.setCursor(0, 0);
+   lcd.print("LPG=");
+   lcd.setCursor(5,0);
+   lcd.print(vout);
+   lcd.print(" D =");
+    // lcd.setCursor(15,0);
+   vin = vout * 4.16667;  
+   lcd.print(vin);
+
+value1 = ((value1 *5) / 1024.0);
+value1 = value1 / (R2/(R1+R2));  
+  // print volt meter result to lcd display
+  lcd.setCursor(0, 1);
+  lcd.print("Batt=");
+  lcd.setCursor(5, 1);
+
+  lcd.print(value1);
+  lcd.print("V");
+ 
+//value1 = analogRead(analogInput2);
+//value1 = ((value1 *5) / 1024.0);
+//vin1 = vout1 * (R2/(R1+R2));  
+  // print volt meter result to lcd display
+  //lcd.setCursor(12, 1);
+  //lcd.print("02=");
+  //lcd.print(value1);
+  // lcd.print("V");
+  
+ // lcd.setCursor(0, 2);  // SET CURSER TO LINE 3
+  //lcd.print("Humidity = ");
+    
+  //lcd.print(DHT.humidity);
+  //lcd.print("%  ");
+  //lcd.setCursor(0, 3);
+ 
+  
+ //Set backlight
+// value1 =analogRead(analogInput2);
+ //value1 = ((value1 *5) / 1024.0);
+  // if (value1 < 4)
+   //{
+    // backlight = 250;  
+  //}
+   //else
+  //{
+  //}
+  
+}
+

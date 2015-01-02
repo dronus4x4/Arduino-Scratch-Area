@@ -1,0 +1,25 @@
+// 0.1.2
+- Removed all #define and went with standard variables.. less potintial complications
+- Renamed loadOnce variable to paramLoaded for clarity
+- Changed biasRAW to represent 20mV
+
+// 0.1.1
+
+- Added limitVoltage parameter for output voltage (needs to take this from profileX.txt)
+
+
+- Added idleVoltage parameter for a base to start the loadpoints from
+
+// 0.1.0
+
+-Read load point parameters from SD card
+
+-255 load points over 0 to 5v
+
+-Seperated function for parameter gathering (readProfile)
+
+
+
+// 0.0.1
+
+-Basic mapping
